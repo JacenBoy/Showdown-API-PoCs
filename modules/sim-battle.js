@@ -34,7 +34,8 @@ module.exports = (streamMode = "battle-stream") => {
         "moves": ["After You", "Attract", "Baby-Doll Eyes", "Disarming Voice", "Double Slap", "Double-Edge", "Entrainment", "Growl", "Heal Pulse", "Helping Hand", "Hyper Voice", "Last Resort", "Misty Terrain", "Play Nice", "Pound", "Refresh", "Secret Power", "Simple Beam", "Take Down", "Surf"]
       }])
     },
-    ai: new RandomPlayerAI(battle.streams.p1)
+    ai: new RandomPlayerAI(battle.streams.p1),
+    active: {}
   };
 
   const p2 = {
@@ -52,7 +53,8 @@ module.exports = (streamMode = "battle-stream") => {
         "moves": [ "Absorb", "Aromatherapy", "Cross Poison", "Fury Cutter", "Giga Drain", "Growth", "Leech Life", "Poison Powder", "Rage Powder", "Scratch", "Slash", "Spore", "Stun Spore", "X-Scissor", "Aerial Ace", "Agility", "Brick Break", "Bullet Seed", "Curse", "Endure", "Energy Ball", "Facade", "Fell Stinger", "Hidden Power", "Hone Claws", "Knock Off", "Leech Seed", "Light Screen", "Natural Gift", "Protect", "Pursuit", "Reflect", "Refresh", "Rest", "Return", "Seed Bomb", "Sludge Bomb", "Solar Beam", "Substitute", "Sunny Day", "Swords Dance", "Synthesis", "Toxic"]
       }])
     },
-    ai: new RandomPlayerAI(battle.streams.p2)
+    ai: new RandomPlayerAI(battle.streams.p2),
+    active: {}
   };
 
     // Let the AI go nuts
@@ -79,8 +81,60 @@ module.exports = (streamMode = "battle-stream") => {
 
     // This is the loop for listening to the "omniscient" stream
     if (streamMode == "player-stream") {
-      for await (const chunk of battle.streams.omniscient) {
-        console.log("\n" + chunk);
+      for await (let chunk of battle.streams.omniscient) {
+        chunk = chunk.split("\n"); // Split the chunk on newlines so we can handle each step of the turn separately
+        for (let d of chunk) {
+          let data = d.split("|"); // Split each step into the parameters
+          data = data.slice(1); // The first element in the array will always be empty
+          switch (data[0]) {
+            // Major actions (https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#major-actions)
+            case "start": {
+              console.log(`-- Battle between ${p1.spec.name} and ${p2.spec.name} --`);
+              break;
+            }
+            case "turn": {
+              console.log(`-- Turn ${data[1]} --`);
+              break;
+            }
+            case "switch": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              const player = mon[0].substring(0,2) == "p1" ? p1 : p2; // In practice, need to be able to handle p3 and p4 as well
+              player.active.name = mon[1];
+              player.active.hp = data[3].split("/")[0];
+              console.log(`${player.spec.name} sent out ${mon[1]}!`);
+              break;
+            }
+            case "move": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              console.log(`${mon[1]} used ${data[2]}!`);
+              break;
+            }
+            case "faint": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              console.log(`${mon[1]} fainted!`);
+              break;
+            }
+            case "win": {
+              console.log(`${data[1]} wins!`);
+              break;
+            }
+            // Minor actions (https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#minor-actions)
+            case "-damage": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              const player = mon[0].substring(0,2) == "p1" ? p1 : p2; // In practice, need to be able to handle p3 and p4 as well
+              const damage = player.active.hp - data[2].split("/")[0].split(" ")[0];
+              player.active.hp = player.active.hp - damage;
+              console.log(`${mon[1]} took ${damage} HP in damage`);
+              break;
+            }
+            case "-fail": {
+              console.log("But it failed!");
+              break;
+            }
+            default:
+              // Nothing to do
+          }
+        }
       }
     }
   })();
