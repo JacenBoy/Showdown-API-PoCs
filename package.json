@@ -1,0 +1,16 @@
+{
+  "name": "showdown-api-pocs",
+  "version": "1.0.0",
+  "description": "Tests of the capabilities of the Showdown API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "repull": "npm uninstall pokemon-showdown && npm install ../pokemon-showdown"
+  },
+  "author": "JacenBoy",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "pokemon-showdown": "file:../pokemon-showdown"
+  }
+}
