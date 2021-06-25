@@ -22,7 +22,17 @@ module.exports = (streamMode = "battle-stream") => {
   const p1 = {
     spec: {
       name: "Serena",
-      team: Teams.pack(Teams.generate(battle.spec.formatid))
+      team: Teams.pack([{
+        "name": "Hanastoa",
+        "species": "Audino",
+        "gender": "F",
+        "item": "Audinite",
+        "ability": "Regenerator",
+        "evs": {"hp": 252, "atk": 252, "def": 252, "spa": 252, "spd": 252, "spe": 252},
+        "nature": "Docile",
+        "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+        "moves": ["After You", "Attract", "Baby-Doll Eyes", "Disarming Voice", "Double Slap", "Double-Edge", "Entrainment", "Growl", "Heal Pulse", "Helping Hand", "Hyper Voice", "Last Resort", "Misty Terrain", "Play Nice", "Pound", "Refresh", "Secret Power", "Simple Beam", "Take Down", "Surf"]
+      }])
     },
     ai: new RandomPlayerAI(battle.streams.p1)
   };
@@ -30,7 +40,17 @@ module.exports = (streamMode = "battle-stream") => {
   const p2 = {
     spec: {
       name: "Dawn",
-      team: Teams.pack(Teams.generate(battle.spec.formatid))
+      team: Teams.pack([{
+        "name": "Hakeli",
+        "species": "Parasect",
+        "gender": "F",
+        "item": "Choice Specs",
+        "ability": "Effect Spore",
+        "evs": {"hp": 252, "atk": 252, "def": 252, "spa": 252, "spd": 252, "spe": 252},
+        "nature": "Docile",
+        "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+        "moves": [ "Absorb", "Aromatherapy", "Cross Poison", "Fury Cutter", "Giga Drain", "Growth", "Leech Life", "Poison Powder", "Rage Powder", "Scratch", "Slash", "Spore", "Stun Spore", "X-Scissor", "Aerial Ace", "Agility", "Brick Break", "Bullet Seed", "Curse", "Endure", "Energy Ball", "Facade", "Fell Stinger", "Hidden Power", "Hone Claws", "Knock Off", "Leech Seed", "Light Screen", "Natural Gift", "Protect", "Pursuit", "Reflect", "Refresh", "Rest", "Return", "Seed Bomb", "Sludge Bomb", "Solar Beam", "Substitute", "Sunny Day", "Swords Dance", "Synthesis", "Toxic"]
+      }])
     },
     ai: new RandomPlayerAI(battle.streams.p2)
   };
