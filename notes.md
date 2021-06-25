@@ -17,5 +17,6 @@ Neither of these options are particularly developer-friendly, and there are adva
 - Pipe delimited data; the same format used for Showdown's client/server communication
 - Data split across multiple data streams
 - One stream for each player, plus a spectator stream and an omniscient stream
+- Stream may sometimes contain multiple events separated by a newline
 
 Mixing and matching these streams seems to cause some issues, so it's recommended to pick one output type.
