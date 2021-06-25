@@ -61,6 +61,7 @@ module.exports = (streamMode = "battle-stream") => {
     if (streamMode == "player-stream") {
       for await (const chunk of battle.streams.omniscient) {
         console.log(chunk);
+        const data = chunk.split("|"); // Player stream data is pipe delimited; it sucks
       }
     }
   })();
