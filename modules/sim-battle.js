@@ -2,6 +2,7 @@
 // Good test for parsing battle output
 const {BattleStream, getPlayerStreams, Teams} = require("pokemon-showdown");
 const {RandomPlayerAI} = require("../node_modules/pokemon-showdown/.sim-dist/tools/random-player-ai");
+const stats = require("../tools/stats.js");
 
 module.exports = (streamMode = "battle-stream") => {
   // Hard-code streamMode because battle-stream is broken for now
@@ -127,8 +128,22 @@ module.exports = (streamMode = "battle-stream") => {
               console.log(`${mon[1]} took ${damage} HP in damage`);
               break;
             }
+            case "-boost": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              console.log(`${mon[1]}'s ${stats[data[2]]} rose${data[3] >= 3 ? "drastically" : data[3] == 2 ? "sharply" : ""}!`)
+              break;
+            }
+            case "-unboost": {
+              const mon = data[1].split(" ",2); // Pokemon names might have spaces, so only split the string once
+              console.log(`${mon[1]}'s ${stats[data[2]]}${data[3] >= 3 ? "severely" : data[3] == 2 ? "harshly" : ""} fell!`)
+              break;
+            }
             case "-fail": {
               console.log("But it failed!");
+              break;
+            }
+            case "-crit": {
+              console.log("Critical hit!");
               break;
             }
             default:
