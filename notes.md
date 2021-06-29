@@ -20,3 +20,8 @@ Neither of these options are particularly developer-friendly, and there are adva
 - Stream may sometimes contain multiple events separated by a newline
 
 Mixing and matching these streams seems to cause some issues, so it's recommended to pick one output type.
+
+## Issues to consider
+- FFAs: The Showdown system has a cap of 4 players, making it unsuitable to large-scale FFAs
+- State saving: Need to determine a solution for saving the current battle state in the event that the bot reboots/crashes, or a battle needs to be put on hold
+- Large-scale battles: Unsure if the battle system supports team sizes greater than 6, in the event that someone wants to attempt a large scale exhibition battle (i.e. 100v100)
